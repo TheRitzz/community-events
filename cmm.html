@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Events</title>
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    /* --------- DARK MODE VARIABLES --------- */
+    :root {
+      --bg-color: #121212;
+      --card-color: #1f1f1f;
+      --text-color: #e0e0e0;
+      /* --accent-color: #bb86fc; */
+      --accent-color: aqua;
+      --accent-hover: #9b63e8;
+      --input-color: #2c2c2c;
+      --shadow-color: rgba(0, 0, 0, 0.6);
+    }
+
+    /* --------- GLOBAL --------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg-color); color: var(--text-color); transition: 0.3s; }
+    h1,h2,h3 { margin-bottom: 0.5rem; }
+    button { cursor: pointer; }
+    input,textarea,select { background-color: var(--input-color); color: var(--text-color); border: none; border-radius: 8px; padding:0.5rem; width:100%; margin:0.3rem 0; }
+    i { margin-right:0.4rem; }
+
+    /* --------- NAVBAR --------- */
+    nav {
+      background-color: var(--card-color);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 1px solid #333;
+      box-shadow: 0 2px 8px var(--shadow-color);
+    }
+    nav h1 { font-size: 2rem; color: var(--accent-color); letter-spacing: 1px; }
+
+    /* --------- FILTERS --------- */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem 2rem;
+      justify-content: center;
+      align-items: center;
+    }
+    .filter-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .filters select, .filters input {
+      padding: 0.5rem 0.8rem;
+      border-radius: 8px;
+      border: none;
+      background-color: var(--input-color);
+      color: var(--text-color);
+      transition: 0.2s;
+    }
+    .filters select:hover, .filters input:hover { background-color: #3a3a3a; }
+    .filters button {
+      padding: 0.5rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--accent-color);
+      color: #121212;
+      font-weight: bold;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+    }
+    .filters button:hover {
+      background-color: var(--accent-hover);
+      transform: scale(1.05);
+    }
+
+    /* --------- EVENTS GRID --------- */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+    .event-card {
+      background-color: var(--card-color);
+      padding: 1.2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .event-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 6px 20px var(--shadow-color);
+    }
+    .event-card h3 {
+      font-size: 1.2rem;
+      color: var(--accent-color);
+      margin-bottom: 0.5rem;
+    }
+    .event-card p {
+      font-size: 0.9rem;
+      margin: 0.3rem 0;
+      color: var(--text-color);
+    }
+
+    /* --------- MODALS --------- */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background-color: var(--card-color);
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 6px 20px var(--shadow-color);
+      animation: slideUp 0.3s ease;
+    }
+    .modal-content h2 {
+      font-size: 1.6rem;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+    .modal-content p {
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      color: var(--text-color);
+    }
+    .modal-content button {
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background-color: var(--accent-color);
+      border: none;
+      border-radius: 8px;
+      color: #121212;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .modal-content button:hover {
+      background-color: var(--accent-hover);
+      transform: scale(1.05);
+    }
+
+    /* --------- ANIMATIONS --------- */
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* --------- RESPONSIVE --------- */
+    @media(max-width:600px){
+      .filters { flex-direction: column; align-items: center; }
+      nav h1 { font-size: 1.5rem; }
+      .events-grid { padding: 1rem; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <h1><i class="fas fa-users"></i> Community Events</h1>
+  </nav>
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <div class="filter-item">
+      <i class="fas fa-tags"></i>
+      <select id="typeFilter">
+        <option value="">All Types</option>
+        <option>Workshop</option>
+        <option>Music</option>
+        <option>Sports</option>
+        <option>Meetup</option>
+        <option>Fitness</option>
+        <option>Entertainment</option>
+        <option>Social</option>
+      </select>
+    </div>
+
+    <div class="filter-item">
+      <i class="fas fa-calendar-alt"></i>
+      <input type="date" id="dateFilter">
+    </div>
+
+    <div class="filter-item">
+      <i class="fas fa-map-marker-alt"></i>
+      <input type="text" id="locationFilter" placeholder="Location">
+    </div>
+
+    <button id="applyFilters"><i class="fas fa-check"></i> Apply</button>
+    <button id="clearFilters"><i class="fas fa-times"></i> Clear</button>
+  </div>
+
+  <!-- EVENTS GRID -->
+  <div class="events-grid" id="eventsGrid"></div>
+
+  <!-- EVENT DETAILS MODAL -->
+  <div class="modal" id="modal">
+    <div class="modal-content" id="modalContent">
+      <h2 id="modalTitle"></h2>
+      <p id="modalType"></p>
+      <p id="modalDate"></p>
+      <p id="modalLocation"></p>
+      <p id="modalHost"></p>
+      <p id="modalDesc"></p>
+      <button id="joinBtn"><i class="fas fa-sign-in-alt"></i> Join</button>
+      <button onclick="closeModal()" style="margin-left:1rem;"><i class="fas fa-times"></i> Close</button>
+    </div>
+  </div>
+
+  <!-- JOIN DETAILS FORM MODAL -->
+  <div class="modal" id="formModal">
+    <div class="modal-content" id="formContent">
+      <h2><i class="fas fa-user-edit"></i> Enter Your Details</h2>
+      <form id="joinForm">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="number" id="age" placeholder="Age" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="tel" id="contact" placeholder="Contact Number" required>
+        <textarea id="note" placeholder="Additional Notes (Optional)"></textarea>
+        <div style="margin-top:1rem;">
+          <button type="submit"><i class="fas fa-paper-plane"></i> Submit</button>
+          <button type="button" onclick="closeForm()"><i class="fas fa-times"></i> Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Flattened events array
+    const events = [
+      { id: 1, title:"Community Yoga Session", type:"Fitness", date:"2025-08-20", location:"Bangalore", host:"Yoga with Anu", description:"Join us for a peaceful yoga session in Cubbon Park." },
+      { id: 2, title:"Beginner Guitar Workshop", type:"Music", date:"2025-08-22", location:"Mumbai", host:"Strings Academy", description:"Learn the basics of guitar playing with hands-on guidance." },
+      { id: 3, title:"Startup Networking Meetup", type:"Meetup", date:"2025-08-25", location:"Delhi", host:"Delhi Entrepreneurs Club", description:"Meet fellow entrepreneurs, pitch ideas, and network." },
+      { id: 4, title:"Digital Marketing Seminar", type:"Workshop", date:"2025-08-28", location:"Hyderabad", host:"Marketing Gurus", description:"Learn the latest trends and strategies in digital marketing." },
+      { id: 5, title:"Weekend Trek to Nandi Hills", type:"Sports", date:"2025-08-30", location:"Bangalore", host:"Adventure Trails", description:"An early morning trek to Nandi Hills followed by breakfast." },
+      { id: 6, title:"Art & Craft for Kids", type:"Workshop", date:"2025-09-01", location:"Pune", host:"Creative Hands", description:"Fun and educational art activities for children aged 6–12." },
+      { id: 7, title:"City Photography Walk", type:"Meetup", date:"2025-09-03", location:"Chennai", host:"Lens Lovers Club", description:"Explore the city while improving your photography skills." },
+      { id: 8, title:"Cooking Masterclass: Italian Cuisine", type:"Workshop", date:"2025-09-05", location:"Kolkata", host:"Chef Maria", description:"Learn to cook authentic Italian dishes from scratch." },
+      { id: 9, title:"Live Jazz Night", type:"Music", date:"2025-09-07", location:"Goa", host:"Goa Jazz Club", description:"An evening of live jazz performances by local musicians." },
+      { id: 10, title:"Community Beach Cleanup", type:"Social", date:"2025-09-10", location:"Mumbai", host:"Eco Warriors", description:"Join us in cleaning up Juhu Beach and making a difference." },
+      { id: 11, title:"Stand-up Comedy Night", type:"Entertainment", date:"2025-09-12", location:"Bangalore", host:"Laugh Out Loud", description:"A night full of laughter with top stand-up comedians." },
+      { id: 12, title:"Chess Tournament", type:"Sports", date:"2025-09-14", location:"Delhi", host:"Delhi Chess Club", description:"Compete with fellow chess enthusiasts for exciting prizes." },
+      { id: 13, title:"Mindfulness Meditation Retreat", type:"Fitness", date:"2025-09-16", location:"Rishikesh", host:"Peaceful Minds", description:"A weekend retreat to practice mindfulness and meditation." },
+      { id: 14, title:"Blockchain for Beginners", type:"Workshop", date:"2025-09-18", location:"Pune", host:"TechLearn Hub", description:"Understand the basics of blockchain and its applications." },
+      { id: 15, title:"Bird Watching Morning", type:"Meetup", date:"2025-09-20", location:"Jaipur", host:"Nature Explorers", description:"Join us to spot and learn about local bird species." },
+      { id: 16, title:"Poetry Open Mic", type:"Entertainment", date:"2025-09-22", location:"Chandigarh", host:"Words & Verses", description:"An evening for poets to share their work with the community." },
+      { id: 17, title:"DIY Home Gardening Workshop", type:"Workshop", date:"2025-09-24", location:"Ahmedabad", host:"Green Thumbs", description:"Learn how to start and maintain your own home garden." },
+      { id: 18, title:"Marathon for Charity", type:"Sports", date:"2025-09-26", location:"Kochi", host:"Run for Cause", description:"Participate in a marathon to raise funds for charity." },
+      { id: 19, title:"Language Exchange Meetup", type:"Meetup", date:"2025-09-28", location:"Bangalore", host:"Global Friends", description:"Practice languages and make friends from different cultures." },
+      { id: 20, title:"Film Screening: Indie Shorts", type:"Entertainment", date:"2025-09-30", location:"Mumbai", host:"Cinephiles Club", description:"An evening of short films by independent filmmakers." }
+    ];
+
+    const eventsGrid = document.getElementById("eventsGrid");
+    const typeFilter = document.getElementById("typeFilter");
+    const dateFilter = document.getElementById("dateFilter");
+    const locationFilter = document.getElementById("locationFilter");
+    const applyBtn = document.getElementById("applyFilters");
+    const clearBtn = document.getElementById("clearFilters");
+
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalType = document.getElementById("modalType");
+    const modalDate = document.getElementById("modalDate");
+    const modalLocation = document.getElementById("modalLocation");
+    const modalHost = document.getElementById("modalHost");
+    const modalDesc = document.getElementById("modalDesc");
+    const joinBtn = document.getElementById("joinBtn");
+
+    const formModal = document.getElementById("formModal");
+    const joinForm = document.getElementById("joinForm");
+
+    let selectedEventId = null;
+
+    function renderEvents() {
+      const type = typeFilter.value;
+      const date = dateFilter.value;
+      const location = locationFilter.value.toLowerCase();
+
+      const filtered = events.filter(e => 
+        (!type || e.type === type) &&
+        (!date || e.date === date) &&
+        (!location || e.location.toLowerCase().includes(location))
+      );
+
+      eventsGrid.innerHTML = filtered.length
+        ? filtered.map(e => `
+            <div class="event-card" onclick="openModal(${e.id})">
+              <h3><i class="fas fa-calendar-check"></i> ${e.title}</h3>
+              <p>${e.type} • ${e.location}</p>
+              <p>${e.date}</p>
+              <p>${e.description.substring(0,60)}...</p>
+            </div>
+          `).join('')
+        : '<p style="padding:1rem 2rem;">No events found for the selected filters.</p>';
+    }
+
+    function openModal(id) {
+      selectedEventId = id;
+      const event = events.find(e => e.id === id);
+      modalTitle.textContent = event.title;
+      modalType.textContent = "Type: " + event.type;
+      modalDate.textContent = "Date: " + event.date;
+      modalLocation.textContent = "Location: " + event.location;
+      modalHost.textContent = "Host: " + event.host;
+      modalDesc.textContent = event.description;
+      modal.style.display = "flex";
+    }
+
+    function closeModal() { modal.style.display = "none"; }
+
+    joinBtn.onclick = () => { closeModal(); openForm(); };
+
+    function openForm() {
+      joinForm.reset();
+      formModal.style.display = "flex";
+    }
+
+    function closeForm() { formModal.style.display = "none"; }
+
+    joinForm.onsubmit = (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const age = document.getElementById("age").value;
+      const email = document.getElementById("email").value;
+      const contact = document.getElementById("contact").value;
+      const note = document.getElementById("note").value;
+      const event = events.find(ev => ev.id === selectedEventId);
+
+      alert(`You have successfully joined "${event.title}"!\n\nName: ${name}\nAge: ${age}\nEmail: ${email}\nContact: ${contact}\nNote: ${note}`);
+      closeForm();
+    };
+
+    applyBtn.onclick = () => { renderEvents(); };
+    clearBtn.onclick = () => {
+      typeFilter.value = "";
+      dateFilter.value = "";
+      locationFilter.value = "";
+      renderEvents();
+    };
+
+    // Initial render
+    renderEvents();
+  </script>
+</body>
+</html>
