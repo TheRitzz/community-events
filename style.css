@@ -1,0 +1,157 @@
+/* --------- DARK MODE VARIABLES --------- */
+:root {
+  --bg-color: #121212;
+  --card-color: #1f1f1f;
+  --text-color: #e0e0e0;
+  --accent-color: #bb86fc;
+  --accent-hover: #9b63e8;
+  --input-color: #2c2c2c;
+  --shadow-color: rgba(0, 0, 0, 0.6);
+}
+
+/* --------- GLOBAL --------- */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: var(--bg-color); color: var(--text-color); transition: 0.3s; }
+h1,h2,h3 { margin-bottom: 0.5rem; }
+button { cursor: pointer; }
+input,textarea,select { background-color: var(--input-color); color: var(--text-color); border: none; border-radius: 8px; padding:0.5rem; width:100%; margin:0.3rem 0; }
+i { margin-right:0.4rem; }
+
+/* --------- NAVBAR --------- */
+nav {
+  background-color: var(--card-color);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #333;
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+nav h1 { font-size: 2rem; color: var(--accent-color); letter-spacing: 1px; }
+
+/* --------- FILTERS --------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  justify-content: center;
+  align-items: center;
+}
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.filters select, .filters input {
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--input-color);
+  color: var(--text-color);
+  transition: 0.2s;
+}
+.filters select:hover, .filters input:hover { background-color: #3a3a3a; }
+.filters button {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--accent-color);
+  color: #121212;
+  font-weight: bold;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+}
+.filters button:hover {
+  background-color: var(--accent-hover);
+  transform: scale(1.05);
+}
+
+/* --------- EVENTS GRID --------- */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+.event-card {
+  background-color: var(--card-color);
+  padding: 1.2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+.event-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 6px 20px var(--shadow-color);
+}
+.event-card h3 {
+  font-size: 1.2rem;
+  color: var(--accent-color);
+  margin-bottom: 0.5rem;
+}
+.event-card p {
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
+  color: var(--text-color);
+}
+
+/* --------- MODALS --------- */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-content {
+  background-color: var(--card-color);
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 6px 20px var(--shadow-color);
+  animation: slideUp 0.3s ease;
+}
+.modal-content h2 {
+  font-size: 1.6rem;
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+}
+.modal-content p {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  color: var(--text-color);
+}
+.modal-content button {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 8px;
+  color: #121212;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.modal-content button:hover {
+  background-color: var(--accent-hover);
+  transform: scale(1.05);
+}
+
+/* --------- ANIMATIONS --------- */
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* --------- RESPONSIVE --------- */
+@media(max-width:600px){
+  .filters { flex-direction: column; align-items: center; }
+  nav h1 { font-size: 1.5rem; }
+  .events-grid { padding: 1rem; gap: 1rem; }
+}
