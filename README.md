@@ -10,7 +10,7 @@ A **web application** to browse, filter, and join local community events.
 - Responsive and dark-themed UI with icons
 
 ## Tech Stack
-- HTML, CSS, JavaScript
+- HTML, CSS, JavaScript in one file
 - Font Awesome icons for UI
 
 ## Usage
