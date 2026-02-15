@@ -16,6 +16,3 @@ A **web application** to browse, filter, and join local community events.
 ## Usage
 1. Open `index.html` in a browser
 2. Browse events, filter them, and click **Join** to submit your details
-
-## License
-MIT
